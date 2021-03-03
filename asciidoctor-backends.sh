@@ -9,9 +9,9 @@ if [ -z "$BUILD_NUMBER" ] ; then BUILD_NUMBER=0 ; fi
 
 # Comment out the toolchains you don't wish to use.
 TOOLCHAINS=$TOOLCHAINS" asciidoctorDocx"
-TOOLCHAINS=$TOOLCHAINS" asciidoctorPDF"
-TOOLCHAINS=$TOOLCHAINS" asciidoctorFopub"
-TOOLCHAINS=$TOOLCHAINS" asciidoctorWkhtmlpdf"
+#TOOLCHAINS=$TOOLCHAINS" asciidoctorPDF"
+#TOOLCHAINS=$TOOLCHAINS" asciidoctorFopub"
+#TOOLCHAINS=$TOOLCHAINS" asciidoctorWkhtmlpdf"
 
 
 function Get_Clone {
@@ -47,10 +47,10 @@ function asciidoctorFopub {
     mv $3/$2.pdf $3/$2-$BUILD_NUMBER.pdf
 }
 
-function asciidoctorWkhtmlpdf {
-    asciidoctor -a data-uri $1 -D $3
-    /c/Program\ Files/wkhtmltopdf/bin/wkhtmltopdf.exe $3/$2.html $3/$2-$BUILD_NUMBER.pdf
-}
+#function asciidoctorWkhtmlpdf {
+#    asciidoctor -a data-uri $1 -D $3
+#    /c/Program\ Files/wkhtmltopdf/bin/wkhtmltopdf.exe $3/$2.html $3/$2-$BUILD_NUMBER.pdf
+#}
 
 function asciidoctorDocx {
     asciidoctor $1 -D $3 -b docbook5
