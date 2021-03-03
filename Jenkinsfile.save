@@ -1,0 +1,47 @@
+node(){
+    
+    def indir = "adoc"
+    def outdir = "output"
+    def files = [];
+
+  
+
+    stage('Preparation') { //
+        cleanWs()
+        // Get some code from a GitHub repository
+        git  url: 'https://github.com/hurzelpurzel/doctest.git', branch: "main"
+        files = sh (script: "ls -1 ${indir}" , returnStdout: true).split()     
+        println "found ${files}"
+        
+    }
+
+    stage("generate html"){
+         sh "mkdir -p ${env.WORKSPACE}/${outdir}/html"
+         files.each {
+             //println "${it}"
+             sh "asciidoctor  -D ${outdir}/html -b html5 ${env.WORKSPACE}/${indir}/${it}"
+         }
+         sh "tar -zcvf ${env.WORKSPACE}/${outdir}/html.tar.gz ${env.WORKSPACE}/${outdir}/html"
+    }    
+    
+    stage("generate docx"){
+         def docpath = "${env.WORKSPACE}/${outdir}/docx"
+          sh "mkdir -p ${docpath}"
+         files.each {
+             //println "${it}"
+             def fileprefix= sh script:"basename  -s .adoc ${it}", returnStdout: true
+             println fileprefix
+             
+             sh "asciidoctor  -D ${outdir}/docx -b docbook5 ${env.WORKSPACE}/${indir}/${it}"
+             
+            // sh "pandoc --from=docbook ${docpath}/${fileprefix}.xml -o ${docpath}/${fileprefix}.docx"
+         }
+         //sh "tar -zcvf ${env.WORKSPACE}/${outdir}/docx.tar.gz ${docpath}"
+    }    
+    
+    stage("provide"){
+        
+        archiveArtifacts artifacts: "${outdir}/*.gz"
+    }
+   
+}

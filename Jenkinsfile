@@ -19,6 +19,11 @@ node(){
              //println "${it}"
              sh "asciidoctor  -D ${outdir} -b html5 ${env.WORKSPACE}/${indir}/${it}"
          }
-
+    }    
+    
+    stage("provide"){
+        
+        archiveArtifacts artifacts: 'output/*'
+    
     }
 }
