@@ -1,14 +1,25 @@
+
 node(){
     cleanWs()
-    def indir = "adoc"
-    def outdir = "output"
-    def outdir1 = "output1"
-    def outdir2 = "output2"
+   
+    def arr =[ { indir : "adoc"
+     outdir : "adocout"
+     outdir1 :"adochtml"
+     outdir2 :"adocdocx"},
+     { indir : "adoc2"
+     outdir : "adoc2out"
+     outdir1 :"adoc2html"
+     outdir2 :"adoc2docx"}]
+
     def files = [];
     def url = "https://github.com/hurzelpurzel/doctest.git"
 
 
-  
+  arr.each{
+    def indir = it.indir
+    def outdir = it.outdir
+    def outdir1 = it.outdir1
+    def outdir2 = it.outdir2
 
     stage('Preparation') { //
         // Get some code from a GitHub repository
@@ -45,7 +56,8 @@ node(){
 
     stage("provide"){
         
-        archiveArtifacts artifacts: 'output/*.gz'
+        archiveArtifacts artifacts: '${outdir}/*.gz'
     
+    }
     }
 }
